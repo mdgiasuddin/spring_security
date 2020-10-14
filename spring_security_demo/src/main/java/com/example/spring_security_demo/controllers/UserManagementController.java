@@ -18,8 +18,4 @@ public class UserManagementController {
         return userManagementService.createNewUser(createUserDTO);
     }
 
-    @PostMapping("/first")
-    public Object createAdmin(@RequestBody CreateUserDTO createUserDTO) throws Exception {
-        return userManagementService.createNewUser(createUserDTO);
-    }
 }
