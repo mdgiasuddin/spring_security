@@ -9,12 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 
 @Component
 public class JWTUtil {
 
-    private String SECRET_KEY = "Secret";
+    private String SECRET_KEY = "Secret_Key_For_JWT_Token";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
