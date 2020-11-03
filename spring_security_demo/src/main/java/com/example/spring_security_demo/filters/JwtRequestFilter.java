@@ -1,7 +1,11 @@
 package com.example.spring_security_demo.filters;
 
+import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.datasource.BearerToken;
+import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import com.example.spring_security_demo.resources.MyUserDetailsService;
 import com.example.spring_security_demo.utils.JWTUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,16 +20,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 @Component
+@RequiredArgsConstructor(onConstructor=@__(@Autowired))
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
-
-    @Autowired
-    private JWTUtil jwtUtil;
+    private final MyUserDetailsService userDetailsService;
+    private final JWTUtil jwtUtil;
+    private final BearerTokenRepository bearerTokenRepository;
 
 
     @Override
@@ -48,10 +52,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);;
+                BearerToken bearerToken = bearerTokenRepository.findByToken(jwtToken);
+                bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE));
+                bearerTokenRepository.save(bearerToken);
             }
         }
 

@@ -1,11 +1,18 @@
 package com.example.spring_security_demo.utils;
 
+import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.datasource.BearerToken;
+import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +20,10 @@ import java.util.Random;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor(onConstructor=@__(@Autowired))
 public class JWTUtil {
+
+    private final BearerTokenRepository bearerTokenRepository;
 
     private String SECRET_KEY = "Secret_Key_For_JWT_Token";
 
@@ -21,9 +31,6 @@ public class JWTUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
@@ -35,7 +42,12 @@ public class JWTUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        BearerToken bearerToken = bearerTokenRepository.findByToken(token);
+
+        if (bearerToken == null)
+            return true;
+
+        return LocalDateTime.now().isAfter(bearerToken.getTimeOut());
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -44,8 +56,10 @@ public class JWTUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60))
+        return Jwts.builder().setClaims(claims).setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE).toInstant()))
+                .setHeaderParam("random", new Random().nextInt())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

@@ -1,10 +1,14 @@
 package com.example.spring_security_demo.resources;
 
+import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.datasource.BearerToken;
 import com.example.spring_security_demo.datasource.User;
 import com.example.spring_security_demo.models.AuthenticationRequest;
 import com.example.spring_security_demo.models.AuthenticationResponse;
+import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import com.example.spring_security_demo.repositories.UserRepository;
 import com.example.spring_security_demo.utils.JWTUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,20 +20,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
 @RestController
+@RequiredArgsConstructor(onConstructor=@__(@Autowired))
 public class HomeResource {
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
-
-    @Autowired
-    private JWTUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final MyUserDetailsService myUserDetailsService;
+    private final JWTUtil jwtUtil;
+    private final HttpServletRequest httpServletRequest;
+    private final BearerTokenRepository bearerTokenRepository;
 
     @GetMapping("/")
     public String home() {
@@ -55,6 +57,13 @@ public class HomeResource {
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         final String jwtToken = jwtUtil.generateToken(userDetails);
+
+        BearerToken bearerToken = new BearerToken();
+        bearerToken.setToken(jwtToken);
+        bearerToken.setUsername(authenticationRequest.getUsername());
+        bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE));
+
+        bearerTokenRepository.save(bearerToken);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
     }
