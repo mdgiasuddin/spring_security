@@ -14,7 +14,7 @@ public class TokenService {
 
     private final JWTUtil jwtUtil;
 
-    protected String getUsername(HttpServletRequest httpServletRequest) {
+    public String getUsername(HttpServletRequest httpServletRequest) {
 
         final String authorizationHeader = httpServletRequest.getHeader("Authorization");
         String username;
@@ -28,6 +28,18 @@ public class TokenService {
 
             return username;
 
+        }
+
+        return null;
+    }
+
+    public String getBearerTokenString(HttpServletRequest httpServletRequest) {
+
+        final String authorizationHeader = httpServletRequest.getHeader("Authorization");
+
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
         }
 
         return null;

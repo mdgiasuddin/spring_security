@@ -1,4 +1,4 @@
-package com.example.spring_security_demo.resources;
+package com.example.spring_security_demo.controllers;
 
 import com.example.spring_security_demo.common.Constants;
 import com.example.spring_security_demo.datasource.BearerToken;
@@ -7,6 +7,8 @@ import com.example.spring_security_demo.models.AuthenticationRequest;
 import com.example.spring_security_demo.models.AuthenticationResponse;
 import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import com.example.spring_security_demo.repositories.UserRepository;
+import com.example.spring_security_demo.resources.MyUserDetailsService;
+import com.example.spring_security_demo.services.LoginService;
 import com.example.spring_security_demo.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,14 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor(onConstructor=@__(@Autowired))
-public class HomeResource {
+public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final MyUserDetailsService myUserDetailsService;
     private final JWTUtil jwtUtil;
     private final HttpServletRequest httpServletRequest;
     private final BearerTokenRepository bearerTokenRepository;
+    private final LoginService loginService;
 
     @GetMapping("/")
     public String home() {
@@ -72,6 +75,12 @@ public class HomeResource {
     public String user() {
         System.out.println("Inside Controller Hello User");
         return ("<h1>Welcome User</h1>");
+    }
+
+    @GetMapping("/logout-me")
+    public String logMeOut() {
+        System.out.println("Inside Controller Hello User");
+        return loginService.logMeOut();
     }
 
     @PostMapping("/user/insert-database")
