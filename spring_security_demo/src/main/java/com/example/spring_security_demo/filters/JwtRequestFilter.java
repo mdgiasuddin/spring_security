@@ -1,6 +1,6 @@
 package com.example.spring_security_demo.filters;
 
-import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.BearerToken;
 import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import com.example.spring_security_demo.resources.MyUserDetailsService;
@@ -8,7 +8,6 @@ import com.example.spring_security_demo.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -56,7 +55,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                 BearerToken bearerToken = bearerTokenRepository.findByToken(jwtToken);
-                bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE));
+                bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(ConstantsClass.TOKEN_TIMEOUT_MINUTE));
                 bearerTokenRepository.save(bearerToken);
             }
         }

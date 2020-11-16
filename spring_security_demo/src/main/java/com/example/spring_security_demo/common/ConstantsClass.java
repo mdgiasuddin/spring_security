@@ -1,6 +1,6 @@
 package com.example.spring_security_demo.common;
 
-public class Constants {
+public class ConstantsClass {
 
     public static final String INPUT_OUTPUT_FILE_DIRECTORY = "E:\\Amar_Ami\\";
     public static final String STATIC_RESOURCES_DIRECTORY = "E:\\Amar_Ami\\static_resources\\";

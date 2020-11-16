@@ -1,6 +1,6 @@
 package com.example.spring_security_demo.utils;
 
-import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.BearerToken;
 import com.example.spring_security_demo.repositories.BearerTokenRepository;
 import io.jsonwebtoken.Claims;
@@ -58,7 +58,7 @@ public class JWTUtil {
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE).toInstant()))
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(ConstantsClass.TOKEN_TIMEOUT_MINUTE).toInstant()))
                 .setHeaderParam("random", new Random().nextInt())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }

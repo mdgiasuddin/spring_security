@@ -1,12 +1,10 @@
 package com.example.spring_security_demo.controllers;
 
-import com.example.spring_security_demo.common.Constants;
+import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.BearerToken;
-import com.example.spring_security_demo.datasource.User;
 import com.example.spring_security_demo.models.AuthenticationRequest;
 import com.example.spring_security_demo.models.AuthenticationResponse;
 import com.example.spring_security_demo.repositories.BearerTokenRepository;
-import com.example.spring_security_demo.repositories.UserRepository;
 import com.example.spring_security_demo.resources.MyUserDetailsService;
 import com.example.spring_security_demo.services.LoginService;
 import com.example.spring_security_demo.utils.JWTUtil;
@@ -64,7 +62,7 @@ public class LoginController {
         BearerToken bearerToken = new BearerToken();
         bearerToken.setToken(jwtToken);
         bearerToken.setUsername(authenticationRequest.getUsername());
-        bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(Constants.TOKEN_TIMEOUT_MINUTE));
+        bearerToken.setTimeOut(LocalDateTime.now().plusMinutes(ConstantsClass.TOKEN_TIMEOUT_MINUTE));
 
         bearerTokenRepository.save(bearerToken);
 
