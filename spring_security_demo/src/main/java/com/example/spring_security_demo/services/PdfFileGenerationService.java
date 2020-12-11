@@ -3,8 +3,10 @@ package com.example.spring_security_demo.services;
 
 import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.utils.PdfFormattingUtils;
+import com.itextpdf.layout.Canvas;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class PdfFileGenerationService {
     public Object generatePdfFile() throws IOException, DocumentException {
 
         float margin = 50;
+
         Document document = new Document(PageSize.A4, margin, margin, margin, margin);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Font headFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.BOLD, BaseColor.BLACK);
@@ -90,4 +93,7 @@ public class PdfFileGenerationService {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
         return new InputStreamResource(byteArrayInputStream);
     }
+
+
+
 }
