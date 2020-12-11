@@ -19,9 +19,9 @@ import java.awt.geom.*;
 public class WaterMarkPdfGeneration {
 
 
-    public void manipulatePdf() throws Exception {
+    public void manipulatePdf(String inputFileName, String outputFileName) throws Exception {
         PdfDocument pdf = new PdfDocument();
-        pdf.loadFromFile(ConstantsClass.INPUT_OUTPUT_FILE_DIRECTORY+"ClassEightAdmitCards.pdf");
+        pdf.loadFromFile(inputFileName);
 
         for (Object object : pdf.getPages()) {
             PdfPageBase page = (PdfPageBase) object;
@@ -31,7 +31,7 @@ public class WaterMarkPdfGeneration {
             page.setBackgroundRegion(rect);
         }
 
-        pdf.saveToFile(ConstantsClass.INPUT_OUTPUT_FILE_DIRECTORY+"ImageWatermark.pdf");
+        pdf.saveToFile(outputFileName);
         pdf.close();
 
     }

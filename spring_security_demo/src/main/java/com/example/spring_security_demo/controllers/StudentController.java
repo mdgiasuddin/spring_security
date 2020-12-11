@@ -1,12 +1,13 @@
 package com.example.spring_security_demo.controllers;
 
 import com.example.spring_security_demo.services.StudentService;
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -16,8 +17,15 @@ public class StudentController {
     private final StudentService studentService;
 
 
-    @PostMapping("/save-student")
-    public Object saveStudent(@RequestBody Map map) {
-        return studentService.saveStudent(map);
+    @PostMapping("/save-student/add")
+    public Object saveStudent(@RequestParam("file") final MultipartFile multipartFile) {
+        return studentService.saveStudent(multipartFile);
     }
+
+    @GetMapping("/generate-admit-card/{classId}")
+    public void generateAdmitCard(@PathVariable("classId") String classId) throws Exception {
+        studentService.generateAdmitCard(classId);
+    }
+
+
 }
