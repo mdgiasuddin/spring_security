@@ -3,7 +3,6 @@ package com.example.spring_security_demo.controllers;
 
 import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.services.PdfFileGenerationService;
-import com.example.spring_security_demo.services.WaterMarkPdfGeneration;
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import java.io.IOException;
 public class PdfFileGenerationController {
 
     private final PdfFileGenerationService pdfFileGenerationService;
-    private final WaterMarkPdfGeneration waterMarkPdfGeneration;
 
     @GetMapping("/Generate-Pdf-File")
     public ResponseEntity generatePdfFile() throws IOException, DocumentException {

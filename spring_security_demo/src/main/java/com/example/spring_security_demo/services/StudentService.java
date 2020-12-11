@@ -6,7 +6,6 @@ import com.example.spring_security_demo.dtos.StudentDTO;
 import com.example.spring_security_demo.repositories.StudentRepository;
 import com.example.spring_security_demo.utils.ClassOptionUtils;
 import com.example.spring_security_demo.utils.ExcelFormattingUtils;
-import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -31,7 +29,7 @@ public class StudentService {
     private final ExcelFormattingUtils excelFormattingUtils;
     private final ClassOptionUtils classOptionUtils;
     private final PdfFileGenerationService pdfFileGenerationService;
-    private final WaterMarkPdfGeneration waterMarkPdfGeneration;
+    private final WatermarkPdfGeneration watermarkPdfGeneration;
 
     public Object saveStudent(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
@@ -178,6 +176,6 @@ public class StudentService {
 
         Thread.sleep(2000);
 
-        waterMarkPdfGeneration.manipulatePdf(admitCardFileName, watermarkAdmitCard);
+        watermarkPdfGeneration.addWaterMarkToPdf(admitCardFileName, watermarkAdmitCard);
     }
 }
