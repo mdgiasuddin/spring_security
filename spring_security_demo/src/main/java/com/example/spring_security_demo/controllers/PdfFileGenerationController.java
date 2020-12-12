@@ -29,8 +29,4 @@ public class PdfFileGenerationController {
         return new ResponseEntity<>(pdfFileGenerationService.generatePdfFile(), httpHeaders, HttpStatus.OK) ;
     }
 
-    @GetMapping("/pdfFile")
-    public void pdfFile() throws Exception {
-        //waterMarkPdfGeneration.manipulatePdf();
-    }
 }

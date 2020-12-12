@@ -16,10 +16,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 @Service
@@ -29,6 +26,7 @@ import java.util.List;
 public class PdfFileGenerationService {
 
     private final PdfFormattingUtils pdfFormattingUtils;
+    private final WatermarkPdfGeneration watermarkPdfGeneration;
 
     private final int SPACING = 20;
 
@@ -93,8 +91,13 @@ public class PdfFileGenerationService {
             e.printStackTrace();
         }
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        return new InputStreamResource(byteArrayInputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+        Image image = Image.getInstance(ConstantsClass.AMAR_AMI_LOGO);
+        float width = 350;
+        float height = 350;
+
+        return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, width, height, 0.1f);
     }
 
 
@@ -116,6 +119,7 @@ public class PdfFileGenerationService {
 
 
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+
 
         document.open();
 

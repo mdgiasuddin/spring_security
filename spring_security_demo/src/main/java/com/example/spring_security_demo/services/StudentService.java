@@ -6,6 +6,7 @@ import com.example.spring_security_demo.dtos.StudentDTO;
 import com.example.spring_security_demo.repositories.StudentRepository;
 import com.example.spring_security_demo.utils.ClassOptionUtils;
 import com.example.spring_security_demo.utils.ExcelFormattingUtils;
+import com.itextpdf.text.Image;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -176,6 +177,7 @@ public class StudentService {
 
         Thread.sleep(2000);
 
-        watermarkPdfGeneration.addWaterMarkToPdf(admitCardFileName, watermarkAdmitCard);
+        Image logoImage = Image.getInstance(ConstantsClass.AMAR_AMI_LOGO);
+        watermarkPdfGeneration.addWaterMarkToPdf(admitCardFileName, watermarkAdmitCard, logoImage, 350, 350, 0.1f);
     }
 }
