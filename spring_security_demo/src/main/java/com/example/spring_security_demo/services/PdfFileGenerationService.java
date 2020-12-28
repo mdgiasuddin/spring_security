@@ -4,19 +4,22 @@ package com.example.spring_security_demo.services;
 import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.Student;
 import com.example.spring_security_demo.utils.PdfFormattingUtils;
-import com.itextpdf.layout.Canvas;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Constants;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -70,7 +73,7 @@ public class PdfFileGenerationService {
             PdfPTable tableChecked = new PdfPTable(6);
             tableChecked.setWidthPercentage(90);
             tableChecked.setSpacingAfter(narrowSpacing);
-            tableChecked.setWidths(new int[] {1, 1, 1, 1, 1, 1});
+            tableChecked.setWidths(new int[]{1, 1, 1, 1, 1, 1});
 
             tableChecked.addCell(pdfFormattingUtils.getBorderlessCell(String.valueOf(checked), Element.ALIGN_LEFT, windingFont));
             tableChecked.addCell(pdfFormattingUtils.getBorderlessCell(String.valueOf(like), Element.ALIGN_LEFT, windingFont));
@@ -80,7 +83,23 @@ public class PdfFileGenerationService {
             tableChecked.addCell(pdfFormattingUtils.getBorderlessCell(String.valueOf(circle), Element.ALIGN_LEFT, windingFont));
             document.open();
 
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(90);
+            table.setSpacingAfter(narrowSpacing);
+            table.setWidths(new int[]{1, 2});
+            table.setHeaderRows(1);
+
+            table.addCell(new PdfPCell(new Phrase("Sl. ", headFont)));
+            table.addCell(new PdfPCell(new Phrase("Name ", headFont)));
+
+            for (int i = 1; i <= 200; i++) {
+                table.addCell(new PdfPCell(new Phrase(i + ".", font)));
+                table.addCell(new PdfPCell(new Phrase("Gias", font)));
+            }
+
+
             document.add(tableChecked);
+            document.add(table);
 
 
             document.close();
