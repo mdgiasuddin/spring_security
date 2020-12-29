@@ -63,12 +63,16 @@ public class PdfFileGenerationService {
 
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
+            DefaultHeaderFooter defaultHeaderFooter = new DefaultHeaderFooter();
+            writer.setPageEvent(defaultHeaderFooter);
+
             char checked = '\u00FE';
-            char unchecked='\u00A8';
+            char unchecked = '\u00A8';
             char like = '\u0043';
             char disLike = '\u0044';
             char list = '\u0076';
             char circle = '\u006C';
+
 
             PdfPTable tableChecked = new PdfPTable(6);
             tableChecked.setWidthPercentage(90);
