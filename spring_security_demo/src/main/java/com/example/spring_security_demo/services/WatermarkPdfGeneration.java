@@ -47,7 +47,14 @@ public class WatermarkPdfGeneration {
         reader.close();
     }
 
-    public InputStreamResource addWaterMarkToPdf(InputStream inputStream, Image image, float width, float height, float opacity) throws IOException, DocumentException {
+    public InputStreamResource addWaterMarkToPdf(InputStream inputStream, Image image, Rectangle pageSize, float width, float height, float opacity) throws IOException, DocumentException {
+        float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
+        float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
+
+        return addWaterMarkToPdf(inputStream, image, x, y, width, height, opacity);
+    }
+
+    public InputStreamResource addWaterMarkToPdf(InputStream inputStream, Image image, float x, float y, float width, float height, float opacity) throws IOException, DocumentException {
         PdfReader reader = new PdfReader(inputStream);
         ByteArrayOutputStream waterMarkOutputStream = new ByteArrayOutputStream();
         int numberOfPages = reader.getNumberOfPages();
@@ -57,12 +64,7 @@ public class WatermarkPdfGeneration {
         PdfGState gState = new PdfGState();
         gState.setFillOpacity(opacity);
         PdfContentByte over;
-        Rectangle pagesize;
-        float x, y;
         for (int i = 1; i <= numberOfPages; i++) {
-            pagesize = reader.getPageSizeWithRotation(i);
-            x = (pagesize.getLeft() + pagesize.getRight()) / 2;
-            y = (pagesize.getTop() + pagesize.getBottom()) / 2;
             over = stamper.getOverContent(i);
             over.saveState();
             over.setGState(gState);

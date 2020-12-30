@@ -38,7 +38,7 @@ public class PdfFileGenerationService {
 
         float margin = 50;
 
-        Document document = new Document(PageSize.A4, margin, margin, margin, margin);
+        Document document = new Document(PageSize.A4, margin, margin, 100, margin);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Font headFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.BOLD, BaseColor.BLACK);
         Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.NORMAL, BaseColor.BLACK);
@@ -117,10 +117,11 @@ public class PdfFileGenerationService {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         Image image = Image.getInstance(ConstantsClass.AMAR_AMI_LOGO);
-        float width = 350;
-        float height = 350;
+        float width = 50;
+        float height = 50;
 
-        return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, width, height, 0.1f);
+        Rectangle pageSize = document.getPageSize();
+        return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, 50, pageSize.getTop() - 50, width, height, 1f);
     }
 
 

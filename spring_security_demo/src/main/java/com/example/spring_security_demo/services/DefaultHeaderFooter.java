@@ -14,8 +14,10 @@ public class DefaultHeaderFooter extends PdfPageEventHelper {
 
     public void onStartPage(PdfWriter writer, Document document) {
 
-        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, new Phrase("Phone: 8813483, 8814375, 8813126", footerFont), 50, document.getPageSize().getTop() - 10, 0);
-        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, new Phrase("Fax: 880-2-9884446; G.P.O. Box No. 3381, Dhaka", footerFont), 50, document.getPageSize().getTop() - 20, 0);
+        float top = document.getPageSize().getTop();
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, new Phrase("Phone: 8813483, 8814375, 8813126", footerFont), 300, top - 20, 0);
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, new Phrase("Fax: 880-2-9884446; G.P.O. Box No. 3381, Dhaka", footerFont), 300, top - 30, 0);
+        ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, new Phrase("E-mail: info@thecitybank.com; Web: www.thecitybank.com; SWIFT: CIBLBDDH", footerFont), 300, top - 40, 0);
     }
 
     public void onEndPage(PdfWriter writer, Document document) {
