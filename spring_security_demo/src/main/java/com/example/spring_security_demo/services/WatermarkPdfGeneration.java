@@ -48,8 +48,8 @@ public class WatermarkPdfGeneration {
     }
 
     public InputStreamResource addWaterMarkToPdf(InputStream inputStream, Image image, Rectangle pageSize, float width, float height, float opacity) throws IOException, DocumentException {
-        float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
-        float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
+        float x = (pageSize.getLeft() + pageSize.getRight() - width) / 2;
+        float y = (pageSize.getTop() + pageSize.getBottom() - height) / 2;
 
         return addWaterMarkToPdf(inputStream, image, x, y, width, height, opacity);
     }
@@ -68,7 +68,7 @@ public class WatermarkPdfGeneration {
             over = stamper.getOverContent(i);
             over.saveState();
             over.setGState(gState);
-            over.addImage(image, width, 0, 0, height, x - (width / 2), y - (height / 2));
+            over.addImage(image, width, 0, 0, height, x, y);
             over.restoreState();
         }
         stamper.close();
