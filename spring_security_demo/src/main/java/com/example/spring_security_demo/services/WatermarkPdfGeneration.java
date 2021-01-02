@@ -1,12 +1,7 @@
 package com.example.spring_security_demo.services;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfGState;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +64,34 @@ public class WatermarkPdfGeneration {
             over.saveState();
             over.setGState(gState);
             over.addImage(image, width, 0, 0, height, x, y);
+            over.restoreState();
+        }
+        stamper.close();
+        reader.close();
+
+        ByteArrayInputStream watermarkInputStream = new ByteArrayInputStream(waterMarkOutputStream.toByteArray());
+
+        return new InputStreamResource(watermarkInputStream);
+    }
+
+    public InputStreamResource addPageNumberToEveryPage(InputStream inputStream) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader(inputStream);
+        ByteArrayOutputStream waterMarkOutputStream = new ByteArrayOutputStream();
+        int numberOfPages = reader.getNumberOfPages();
+
+        PdfStamper stamper = new PdfStamper(reader, waterMarkOutputStream);
+
+        PdfGState gState = new PdfGState();
+        gState.setFillOpacity(1f);
+        PdfContentByte over;
+        Font footerFront = new Font(Font.FontFamily.TIMES_ROMAN, 9f, Font.BOLD, BaseColor.BLACK);
+
+        for (int i = 1; i <= numberOfPages; i++) {
+            over = stamper.getOverContent(i);
+            over.saveState();
+            over.setGState(gState);
+            Phrase pageNumText = new Phrase("Page : " + i + " of " + numberOfPages, footerFront);
+            ColumnText.showTextAligned(over, Element.ALIGN_CENTER, pageNumText, 400, 80, 0);
             over.restoreState();
         }
         stamper.close();

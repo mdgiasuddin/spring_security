@@ -121,8 +121,10 @@ public class PdfFileGenerationService {
         float height = 50;
 
         Rectangle pageSize = document.getPageSize();
-        return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, 50, pageSize.getTop() - 50, width, height, 1f);
+        //return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, 50, pageSize.getTop() - 50, width, height, 1f);
         //return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, pageSize, width, height, 1f);
+
+        return watermarkPdfGeneration.addPageNumberToEveryPage(inputStream);
     }
 
 
