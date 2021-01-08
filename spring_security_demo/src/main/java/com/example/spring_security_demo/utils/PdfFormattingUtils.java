@@ -2,6 +2,7 @@ package com.example.spring_security_demo.utils;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import org.springframework.stereotype.Component;
 
@@ -10,14 +11,14 @@ import java.util.List;
 @Component
 public class PdfFormattingUtils {
 
-    public PdfPCell getDottedLineBorderedCell(String text, int alignment, Font font, int border) {
-        //DottedCell dottedCell = new DottedCell();
+    public PdfPCell getDottedLineBorderedCell(String text, int alignment, Font font, PdfPCellEvent dottedCell) {
         PdfPCell cell = new PdfPCell();
-        //cell.setCellEvent(dottedCell);
+        cell.setCellEvent(dottedCell);
         cell.setPhrase(new Phrase(text, font));
         cell.setPadding(1);
-        //cell.setHorizontalAlignment(alignment);
-        cell.setBorder(border);
+        cell.setHorizontalAlignment(alignment);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setBorder(PdfPCell.NO_BORDER);
         return cell;
     }
 

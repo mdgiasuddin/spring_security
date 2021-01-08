@@ -1,6 +1,5 @@
 package com.example.spring_security_demo.resources;
 
-import com.example.spring_security_demo.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

@@ -2,7 +2,6 @@ package com.example.spring_security_demo.resources;
 
 import com.example.spring_security_demo.datasource.User;
 import com.example.spring_security_demo.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
