@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -72,8 +71,7 @@ public class MiscellaneousService {
         return wordList;
     }
 
-    public String numberToWord(Map map) {
-        String numString = String.valueOf(map.get("number"));
+    public String numberToWord(String numString) {
         numString = numString.replace(".", "P");
         numString = formattingNumberString(numString);
 

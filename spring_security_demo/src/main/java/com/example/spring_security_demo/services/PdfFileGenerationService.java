@@ -30,6 +30,7 @@ public class PdfFileGenerationService {
 
     private final PdfFormattingUtils pdfFormattingUtils;
     private final WatermarkPdfGeneration watermarkPdfGeneration;
+    private final MiscellaneousService miscellaneousService;
 
     private final int SPACING = 20;
 
@@ -91,19 +92,27 @@ public class PdfFileGenerationService {
             table.setWidthPercentage(90);
             table.setSpacingAfter(narrowSpacing);
             table.setWidths(new int[]{1, 2});
-            table.setHeaderRows(1);
+            //table.setHeaderRows(1);
 
             table.addCell(new PdfPCell(new Phrase("Sl. ", headFont)));
             table.addCell(new PdfPCell(new Phrase("Name ", headFont)));
 
-            for (int i = 1; i <= 200; i++) {
-                table.addCell(new PdfPCell(new Phrase(i + ".", font)));
-                table.addCell(new PdfPCell(new Phrase("Gias", font)));
-            }
+            /*for (int i = 1; i <= 200; i++) {
+                table.addCell(pdfFormattingUtils.getDottedLineBorderedCell(i+".", Element.ALIGN_CENTER, font));
+                table.addCell(pdfFormattingUtils.getBorderlessCell("Gias", Element.ALIGN_CENTER, font));
+            }*/
 
+            PdfPTable dottedTable = pdfFormattingUtils.createTable(4, 100, 20, new int[]{1, 1, 1, 10}, Element.ALIGN_CENTER);
+            String number = "12345.67";
+
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell("Amount", Element.ALIGN_LEFT, font, PdfPCell.NO_BORDER));
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(number, Element.ALIGN_LEFT, font, PdfPCell.BOTTOM));
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell("In Word", Element.ALIGN_LEFT, font, PdfPCell.NO_BORDER));
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(miscellaneousService.numberToWord(number), Element.ALIGN_LEFT, font, PdfPCell.BOTTOM));
 
             document.add(tableChecked);
             document.add(table);
+            document.add(dottedTable);
 
 
             document.close();

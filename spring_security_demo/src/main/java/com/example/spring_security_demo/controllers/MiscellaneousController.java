@@ -20,6 +20,6 @@ public class MiscellaneousController {
 
     @PostMapping("/number-to-word")
     public String numberToWord(@RequestBody Map map) {
-        return miscellaneousService.numberToWord(map);
+        return miscellaneousService.numberToWord(String.valueOf(map.get("number")));
     }
 }

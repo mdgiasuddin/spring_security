@@ -15,5 +15,5 @@ public class ConstantsClass {
     public static final String OLD_ENGLISH = STATIC_RESOURCES_DIRECTORY + "OLDENGL.TTF";
 
 
-    public static final int TOKEN_TIMEOUT_MINUTE = 30;
+    public static final int TOKEN_TIMEOUT_MINUTE = 120;
 }
