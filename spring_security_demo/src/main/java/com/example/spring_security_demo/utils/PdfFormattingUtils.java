@@ -11,13 +11,12 @@ import java.util.List;
 @Component
 public class PdfFormattingUtils {
 
-    public PdfPCell getDottedLineBorderedCell(String text, int alignment, Font font, PdfPCellEvent dottedCell) {
+    public PdfPCell getDottedLineBorderedCell(String text, int alignment, Font font, PdfPCellEvent dottedCellEvent) {
         PdfPCell cell = new PdfPCell();
-        cell.setCellEvent(dottedCell);
+        cell.setCellEvent(dottedCellEvent);
         cell.setPhrase(new Phrase(text, font));
-        cell.setPadding(1);
+        cell.setPadding(2);
         cell.setHorizontalAlignment(alignment);
-        cell.setBorder(PdfPCell.NO_BORDER);
         cell.setBorder(PdfPCell.NO_BORDER);
         return cell;
     }
