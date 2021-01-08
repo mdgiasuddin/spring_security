@@ -3,6 +3,10 @@ package com.example.spring_security_demo.services;
 
 import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.Student;
+import com.example.spring_security_demo.dtos.HeaderFooterText;
+import com.example.spring_security_demo.dtos.Text2DPoint;
+import com.example.spring_security_demo.utils.DottedCellEvent;
+import com.example.spring_security_demo.utils.DottedTableEvent;
 import com.example.spring_security_demo.utils.PdfFormattingUtils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
@@ -20,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -37,17 +42,15 @@ public class PdfFileGenerationService {
 
     public Object generatePdfFile() throws IOException, DocumentException {
 
-        float margin = 50;
+        float margin = 30;
 
         Document document = new Document(PageSize.A4, margin, margin, 100, margin);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Font headFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.BOLD, BaseColor.BLACK);
         Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.NORMAL, BaseColor.BLACK);
 
-
         BaseFont baseFont = BaseFont.createFont( ConstantsClass.STATIC_RESOURCES_DIRECTORY + "wingding.ttf", BaseFont.IDENTITY_H, false);
         Font windingFont = new Font(baseFont, 11f, Font.NORMAL);
-
 
         Font largeFont = new Font(Font.FontFamily.TIMES_ROMAN, 15f, Font.BOLD, BaseColor.BLACK);
         Font dateFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.ITALIC, BaseColor.BLACK);
@@ -64,7 +67,17 @@ public class PdfFileGenerationService {
 
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
-            DefaultHeaderFooter defaultHeaderFooter = new DefaultHeaderFooter();
+            float top = document.getPageSize().getTop();
+            DefaultHeaderFooter defaultHeaderFooter = new DefaultHeaderFooter(
+                    Arrays.asList(
+                            new HeaderFooterText("Phone: 8813483, 8814375, 8813126", new Text2DPoint(50, top - 10)),
+                            new HeaderFooterText("Fax: 880-2-9884446; G.P.O. Box No. 3381, Dhaka", new Text2DPoint(50, top - 20)),
+                            new HeaderFooterText("E-mail: info@thecitybank.com; Web: www.thecitybank.com; SWIFT: CIBLBDDH", new Text2DPoint(50, top - 30)),
+                            new HeaderFooterText("E-mail: info@thecitybank.com; Web: www.thecitybank.com; SWIFT: CIBLBDDH", new Text2DPoint(50, 10)),
+                            new HeaderFooterText("Fax: 880-2-9884446; G.P.O. Box No. 3381, Dhaka", new Text2DPoint(50, 20)),
+                            new HeaderFooterText("Phone: 8813483, 8814375, 8813126", new Text2DPoint(50, 30))
+                    )
+            );
             writer.setPageEvent(defaultHeaderFooter);
 
             char checked = '\u00FE';
@@ -92,27 +105,49 @@ public class PdfFileGenerationService {
             table.setWidthPercentage(90);
             table.setSpacingAfter(narrowSpacing);
             table.setWidths(new int[]{1, 2});
-            //table.setHeaderRows(1);
+            table.setHeaderRows(1);
 
             table.addCell(new PdfPCell(new Phrase("Sl. ", headFont)));
             table.addCell(new PdfPCell(new Phrase("Name ", headFont)));
 
-            /*for (int i = 1; i <= 200; i++) {
-                table.addCell(pdfFormattingUtils.getDottedLineBorderedCell(i+".", Element.ALIGN_CENTER, font));
-                table.addCell(pdfFormattingUtils.getBorderlessCell("Gias", Element.ALIGN_CENTER, font));
-            }*/
+            for (int i = 1; i <= 200; i++) {
+                table.addCell(pdfFormattingUtils.getBorderedCell(i + ".", Element.ALIGN_CENTER, font));
+                table.addCell(pdfFormattingUtils.getBorderedCell("Gias", Element.ALIGN_CENTER, font));
+            }
 
-            PdfPTable dottedTable = pdfFormattingUtils.createTable(4, 100, 20, new int[]{1, 1, 1, 10}, Element.ALIGN_CENTER);
+            PdfPTable dottedTable = pdfFormattingUtils.createTable(4, 100, 20, new int[]{8, 8, 8, 76}, Element.ALIGN_CENTER);
             String number = "12345.67";
 
-            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell("Amount", Element.ALIGN_LEFT, font, PdfPCell.NO_BORDER));
-            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(number, Element.ALIGN_LEFT, font, PdfPCell.BOTTOM));
-            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell("In Word", Element.ALIGN_LEFT, font, PdfPCell.NO_BORDER));
-            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(miscellaneousService.numberToWord(number), Element.ALIGN_LEFT, font, PdfPCell.BOTTOM));
+            DottedCellEvent dottedCellEvent = new DottedCellEvent(true);
+            dottedTable.addCell(pdfFormattingUtils.getBorderlessCell("Amount", Element.ALIGN_LEFT, font));
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(number, Element.ALIGN_CENTER, font, dottedCellEvent));
+            dottedTable.addCell(pdfFormattingUtils.getBorderlessCell("In Word", Element.ALIGN_CENTER, font));
+            dottedTable.addCell(pdfFormattingUtils.getDottedLineBorderedCell(miscellaneousService.numberToWord(number), Element.ALIGN_CENTER, font, dottedCellEvent));
+
+            PdfPTable dottedTable2 = pdfFormattingUtils.createTable(4, 100, 20, new int[]{8, 8, 8, 76}, Element.ALIGN_CENTER);
+            number = "12345.67";
+
+            DottedCellEvent dottedCellEvent2 = new DottedCellEvent(2, 2, 2);
+            dottedTable2.addCell(pdfFormattingUtils.getBorderlessCell("Amount", Element.ALIGN_LEFT, font));
+            dottedTable2.addCell(pdfFormattingUtils.getDottedLineBorderedCell(number, Element.ALIGN_CENTER, font, dottedCellEvent2));
+            dottedTable2.addCell(pdfFormattingUtils.getBorderlessCell("In Word", Element.ALIGN_CENTER, font));
+            dottedTable2.addCell(pdfFormattingUtils.getDottedLineBorderedCell(miscellaneousService.numberToWord(number), Element.ALIGN_CENTER, font, dottedCellEvent2));
+
+            DottedTableEvent dottedTableEvent = new DottedTableEvent(2f, 2f, 2f);
+            PdfPTable dottedTable3 = pdfFormattingUtils.createTable(4, 100, 20, new int[]{8, 8, 8, 76}, Element.ALIGN_CENTER);
+            dottedTable3.setTableEvent(dottedTableEvent);
+            number = "12345.67";
+
+            dottedTable3.addCell(pdfFormattingUtils.getBorderlessCell("Amount", Element.ALIGN_LEFT, font));
+            dottedTable3.addCell(pdfFormattingUtils.getBorderlessCell(number, Element.ALIGN_CENTER, font));
+            dottedTable3.addCell(pdfFormattingUtils.getBorderlessCell("In Word", Element.ALIGN_CENTER, font));
+            dottedTable3.addCell(pdfFormattingUtils.getBorderlessCell(miscellaneousService.numberToWord(number), Element.ALIGN_CENTER, font));
 
             document.add(tableChecked);
             document.add(table);
             document.add(dottedTable);
+            document.add(dottedTable2);
+            document.add(dottedTable3);
 
 
             document.close();
@@ -141,7 +176,7 @@ public class PdfFileGenerationService {
 
         Rectangle pageSize = new Rectangle(594, 423);
         pageSize.setBackgroundColor(new BaseColor(230, 230, 250));
-        float margin = 25;
+        float margin = 50;
         Document document = new Document(pageSize, margin, margin, margin, margin);
 
         BaseFont scriptMTBold = BaseFont.createFont(ConstantsClass.SCRIPT_MT_BOLD, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
