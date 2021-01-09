@@ -68,6 +68,9 @@ public class PdfFileGenerationService {
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
             float top = document.getPageSize().getTop();
+            Image image = Image.getInstance(ConstantsClass.AMAR_AMI_LOGO);
+            image.scaleToFit(80, 80);
+            image.setAbsolutePosition(300, top - 90);
             DefaultHeaderFooter defaultHeaderFooter = new DefaultHeaderFooter(
                     Arrays.asList(
                             new HeaderFooterText("Phone: 8813483, 8814375, 8813126", new Text2DPoint(50, top - 10)),
@@ -77,6 +80,7 @@ public class PdfFileGenerationService {
                             new HeaderFooterText("Fax: 880-2-9884446; G.P.O. Box No. 3381, Dhaka", new Text2DPoint(50, 20)),
                             new HeaderFooterText("Phone: 8813483, 8814375, 8813126", new Text2DPoint(50, 30))
                     )
+//                    , image
             );
             writer.setPageEvent(defaultHeaderFooter);
 
