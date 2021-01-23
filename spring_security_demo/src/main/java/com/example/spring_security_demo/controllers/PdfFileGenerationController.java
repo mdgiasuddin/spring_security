@@ -26,7 +26,15 @@ public class PdfFileGenerationController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         httpHeaders.add("content-disposition", "attachment; filename=winding-font-example.pdf");
-        return new ResponseEntity<>(pdfFileGenerationService.generatePdfFile(), httpHeaders, HttpStatus.OK) ;
+        return new ResponseEntity<>(pdfFileGenerationService.generatePdfFile(), httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/Bcs-applicants-copy")
+    public ResponseEntity bcsApplicantsCopy() throws IOException, DocumentException {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+        httpHeaders.add("content-disposition", "attachment; filename=applicants-copy.pdf");
+        return new ResponseEntity<>(pdfFileGenerationService.bcsApplicantsCopy(), httpHeaders, HttpStatus.OK);
     }
 
 }

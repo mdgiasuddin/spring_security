@@ -8,6 +8,8 @@ public class ConstantsClass {
     public static final String PRIZE_GIVING_PDF_FILE = INPUT_OUTPUT_FILE_DIRECTORY + "PrizeGivingList.pdf";
 
     public static final String AMAR_AMI_LOGO = STATIC_RESOURCES_DIRECTORY + "amar_ami.png";
+    public static final String GOVT_SEAL = STATIC_RESOURCES_DIRECTORY + "govt_seal.png";
+    public static final String GIAS_PHOTO = STATIC_RESOURCES_DIRECTORY + "gias_photo.jpg";
     public static final String AMAR_AMI_LOGO_WHITE = STATIC_RESOURCES_DIRECTORY + "amar_ami_white.png";
     public static final String SIGNATURE_IMAGE = STATIC_RESOURCES_DIRECTORY + "gias_signature.png";
 

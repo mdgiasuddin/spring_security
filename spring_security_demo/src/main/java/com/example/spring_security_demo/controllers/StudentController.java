@@ -23,5 +23,4 @@ public class StudentController {
         studentService.generateAdmitCard(classId);
     }
 
-
 }

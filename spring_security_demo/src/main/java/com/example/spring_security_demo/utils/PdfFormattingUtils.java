@@ -21,13 +21,22 @@ public class PdfFormattingUtils {
         return cell;
     }
 
-    public PdfPCell createMergedCell(String content, int colSpan, int rowSpan, int border, Font font, float minimumHeight) {
+    public PdfPCell createMergedCell(String content, int colSpan, int rowSpan, int border, Font font) {
         PdfPCell cell = new PdfPCell(new Phrase(content, font));
         cell.setColspan(colSpan);
         cell.setRowspan(rowSpan);
         cell.setBorder(border);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setMinimumHeight(minimumHeight);
+        return cell;
+    }
+
+    public PdfPCell createMergedCell(Image image, int colSpan, int rowSpan, int border) {
+        PdfPCell cell = new PdfPCell();
+        cell.addElement(image);
+        cell.setColspan(colSpan);
+        cell.setRowspan(rowSpan);
+        cell.setBorder(border);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         return cell;
     }
 
@@ -128,6 +137,38 @@ public class PdfFormattingUtils {
         cell.addElement(paragraph);
         cell.setPadding(3);
         cell.setBorder(border);
+        return cell;
+    }
+
+    public PdfPCell getCellWithBackgroundColor(List<Paragraph> paragraphList, int red, int green, int blue) {
+        PdfPCell cell = new PdfPCell();
+        for (Paragraph paragraph : paragraphList)
+            cell.addElement(paragraph);
+        cell.setBackgroundColor(new BaseColor(red, green, blue));
+        cell.setBorder(PdfPCell.NO_BORDER);
+        return cell;
+    }
+
+    public PdfPCell getCellWithBackgroundColor(String text, Font font, float spacing, int alignment, int red, int green, int blue) {
+        PdfPCell cell = new PdfPCell();
+        Paragraph paragraph = createParagraph(text, font, spacing, alignment);
+        cell.setPadding(2);
+        cell.setUseAscender(true);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.addElement(paragraph);
+        cell.setFixedHeight(font.getSize() + 4);
+        cell.setBackgroundColor(new BaseColor(red, green, blue));
+        cell.setBorder(PdfPCell.NO_BORDER);
+        return cell;
+    }
+
+    public PdfPCell getCellWithBackgroundColor(int colSpan, int rowSpan, int red, int green, int blue) {
+        PdfPCell cell = new PdfPCell();
+        cell.setBackgroundColor(new BaseColor(red, green, blue));
+        cell.setColspan(colSpan);
+        cell.setRowspan(rowSpan);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setFixedHeight(1);
         return cell;
     }
 

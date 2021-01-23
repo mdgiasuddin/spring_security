@@ -5,6 +5,7 @@ import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.Student;
 import com.example.spring_security_demo.dtos.HeaderFooterText;
 import com.example.spring_security_demo.dtos.Text2DPoint;
+import com.example.spring_security_demo.utils.CustomBorderEvent;
 import com.example.spring_security_demo.utils.DottedCellEvent;
 import com.example.spring_security_demo.utils.DottedTableEvent;
 import com.example.spring_security_demo.utils.PdfFormattingUtils;
@@ -38,6 +39,7 @@ public class PdfFileGenerationService {
     private final MiscellaneousService miscellaneousService;
 
     private final int SPACING = 20;
+    private final int NARROW_SPACING = 5;
 
 
     public Object generatePdfFile() throws IOException, DocumentException {
@@ -171,6 +173,240 @@ public class PdfFileGenerationService {
         Rectangle pageSize = document.getPageSize();
         //return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, 50, pageSize.getTop() - 50, width, height, 1f);
         //return watermarkPdfGeneration.addWaterMarkToPdf(inputStream, image, pageSize, width, height, 1f);
+
+        return watermarkPdfGeneration.addPageNumberToEveryPage(inputStream);
+    }
+
+    public Object bcsApplicantsCopy() throws IOException, DocumentException {
+
+        float margin = 25f;
+
+        Document document = new Document(PageSize.A4, margin, margin, margin, margin);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Font headFont = new Font(Font.FontFamily.TIMES_ROMAN, 11f, Font.BOLD, BaseColor.BLACK);
+        Font smallFont = new Font(Font.FontFamily.TIMES_ROMAN, 9f, Font.NORMAL, BaseColor.BLACK);
+        Font verySmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 7f, Font.NORMAL, BaseColor.BLACK);
+        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.NORMAL, BaseColor.BLACK);
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+
+        BaseFont baseFont = BaseFont.createFont(ConstantsClass.STATIC_RESOURCES_DIRECTORY + "wingding.ttf", BaseFont.IDENTITY_H, false);
+        Font windingFont = new Font(baseFont, 11f, Font.NORMAL);
+
+
+        try {
+
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+
+            float top = document.getPageSize().getTop();
+            Image image = Image.getInstance(ConstantsClass.GOVT_SEAL);
+            image.setAlignment(Element.ALIGN_CENTER);
+            image.scaleToFit(55, 55);
+
+            PdfPTable imageTable = pdfFormattingUtils.createTable(3, 100, SPACING, new int[]{15, 55, 30}, Element.ALIGN_LEFT);
+
+            CustomBorderEvent leftTopBottom = new CustomBorderEvent(true, false, true, true);
+            CustomBorderEvent topBottom = new CustomBorderEvent(false, false, true, true);
+            CustomBorderEvent rightTopBottom = new CustomBorderEvent(false, true, true, true);
+
+            PdfPCell imageCell = new PdfPCell();
+            imageCell.addElement(image);
+            imageCell.setBorder(PdfPCell.NO_BORDER);
+            imageCell.setCellEvent(leftTopBottom);
+            imageTable.addCell(imageCell);
+
+            PdfPCell textCell = new PdfPCell();
+            Paragraph paragraph = new Paragraph("Government of the People's Republic of Bangladesh\n", smallFont);
+            paragraph.add(new Chunk("Bangladesh Public Service Commission\n", boldFont));
+            paragraph.setAlignment(Element.ALIGN_LEFT);
+            textCell.addElement(paragraph);
+            textCell.setBorder(PdfPCell.NO_BORDER);
+            textCell.setCellEvent(topBottom);
+
+            PdfPCell textCell2 = new PdfPCell();
+            Paragraph paragraph2 = new Paragraph("43rd BCS\n", boldFont);
+            paragraph2.add(new Chunk("Examination 2020\n", boldFont));
+            paragraph2.add(new Chunk("Applicant's Copy [BPSC Form-1]\n", smallFont));
+            paragraph2.setAlignment(Element.ALIGN_LEFT);
+            textCell2.addElement(paragraph2);
+            textCell2.setBorder(PdfPCell.NO_BORDER);
+            textCell2.setCellEvent(rightTopBottom);
+
+            imageTable.addCell(textCell);
+            imageTable.addCell(textCell2);
+
+            PdfPTable userIdTable = pdfFormattingUtils.createTable(2, 100, NARROW_SPACING, new int[]{25, 75}, Element.ALIGN_LEFT);
+            PdfPCell userIdCell = pdfFormattingUtils.getCellWithBackgroundColor("User ID: CSMKMLVO", boldFont, 0, Element.ALIGN_LEFT, 160, 160, 160);
+
+            Paragraph examCenterParagraph = pdfFormattingUtils.createParagraph("Exam Centre: DHAKA", verySmallFont, 0, Element.ALIGN_RIGHT);
+            Paragraph generalParagraph = pdfFormattingUtils.createParagraph("General Cadre", verySmallFont, 0, Element.ALIGN_RIGHT);
+
+            paragraph2.setAlignment(Element.ALIGN_RIGHT);
+            PdfPCell examCenterCell = pdfFormattingUtils.getCellWithBackgroundColor(Arrays.asList(examCenterParagraph, generalParagraph), 192, 192, 192);
+
+            userIdTable.addCell(userIdCell);
+            userIdTable.addCell(examCenterCell);
+
+            PdfPTable applicantsDetails = pdfFormattingUtils.createTable(4, 100, NARROW_SPACING, new int[]{75, 82, 1, 142}, Element.ALIGN_LEFT);
+            Image photoImage = Image.getInstance(ConstantsClass.GIAS_PHOTO);
+            photoImage.setAlignment(Element.ALIGN_CENTER);
+            photoImage.scaleToFit(110, 110);
+
+            PdfPCell photoImageCell = pdfFormattingUtils.createMergedCell(photoImage, 1, 16, PdfPCell.NO_BORDER);
+            applicantsDetails.addCell(photoImageCell);
+
+            PdfPCell emptyColumn = pdfFormattingUtils.getCellWithBackgroundColor("", smallFont, 0, Element.ALIGN_LEFT, 255, 255, 255);
+            PdfPCell emptyRow = pdfFormattingUtils.getCellWithBackgroundColor(3, 1, 255, 255, 255);
+
+            PdfPCell detailsCell11 = pdfFormattingUtils.getCellWithBackgroundColor("Applicant's Name", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell12 = pdfFormattingUtils.getCellWithBackgroundColor("MD- GIASH UDDIN", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell21 = pdfFormattingUtils.getCellWithBackgroundColor("Father's Name", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell22 = pdfFormattingUtils.getCellWithBackgroundColor("MD- MOSHARAF HOSSAIN", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell31 = pdfFormattingUtils.getCellWithBackgroundColor("Mother's Name", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell32 = pdfFormattingUtils.getCellWithBackgroundColor("MST JAHANARA BEGUM", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell41 = pdfFormattingUtils.getCellWithBackgroundColor("Date of Birth", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell42 = pdfFormattingUtils.getCellWithBackgroundColor("1995-08-02 [YYYY-MM-DD] 25 Years 3 Months 0 Days", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell51 = pdfFormattingUtils.getCellWithBackgroundColor("Contact No", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell52 = pdfFormattingUtils.getCellWithBackgroundColor("017******20", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell61 = pdfFormattingUtils.getCellWithBackgroundColor("Freedom Fighter Status", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell62 = pdfFormattingUtils.getCellWithBackgroundColor("Non Freedom Fighter", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell71 = pdfFormattingUtils.getCellWithBackgroundColor("Disability", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell72 = pdfFormattingUtils.getCellWithBackgroundColor("None", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell81 = pdfFormattingUtils.getCellWithBackgroundColor("National ID Number", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell detailsCell82 = pdfFormattingUtils.getCellWithBackgroundColor("5076143204", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+
+            applicantsDetails.addCell(detailsCell11);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell12);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell21);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell22);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell31);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell32);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell41);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell42);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell51);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell52);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell61);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell62);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell71);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell72);
+            applicantsDetails.addCell(emptyRow);
+
+            applicantsDetails.addCell(detailsCell81);
+            applicantsDetails.addCell(emptyColumn);
+            applicantsDetails.addCell(detailsCell82);
+            applicantsDetails.addCell(emptyRow);
+
+            emptyRow = pdfFormattingUtils.getCellWithBackgroundColor(7, 1, 255, 255, 255);
+
+            PdfPTable otherDetails = pdfFormattingUtils.createTable(7, 100, NARROW_SPACING, new int[]{50, 1, 99, 1, 50, 1, 98}, Element.ALIGN_LEFT);
+            PdfPCell otherDetailsCell11 = pdfFormattingUtils.getCellWithBackgroundColor("Home District", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell12 = pdfFormattingUtils.getCellWithBackgroundColor("Meherpur", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell13 = pdfFormattingUtils.getCellWithBackgroundColor("Ethnic Minority", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell14 = pdfFormattingUtils.getCellWithBackgroundColor("None", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+
+            PdfPCell otherDetailsCell21 = pdfFormattingUtils.getCellWithBackgroundColor("Marital Status", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell22 = pdfFormattingUtils.getCellWithBackgroundColor("Married - Spouse Name: MST KAMINI AKTER", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell23 = pdfFormattingUtils.getCellWithBackgroundColor("Employment Status", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell24 = pdfFormattingUtils.getCellWithBackgroundColor("Private Organisation", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+
+            PdfPCell otherDetailsCell31 = pdfFormattingUtils.getCellWithBackgroundColor("Gender", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell32 = pdfFormattingUtils.getCellWithBackgroundColor("Male", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell33 = pdfFormattingUtils.getCellWithBackgroundColor("Height | Weight | Chest", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+            PdfPCell otherDetailsCell34 = pdfFormattingUtils.getCellWithBackgroundColor("170 [cm] | 82 [kg] | 106 [cm]", smallFont, 0, Element.ALIGN_LEFT, 192, 192, 192);
+
+            otherDetails.addCell(otherDetailsCell11);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell12);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell13);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell14);
+            otherDetails.addCell(emptyRow);
+
+            otherDetails.addCell(otherDetailsCell21);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell22);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell23);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell24);
+            otherDetails.addCell(emptyRow);
+
+            otherDetails.addCell(otherDetailsCell31);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell32);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell33);
+            otherDetails.addCell(emptyColumn);
+            otherDetails.addCell(otherDetailsCell34);
+
+
+            PdfPTable addressDetails = pdfFormattingUtils.createTable(3, 100, NARROW_SPACING, new int[]{150, 1, 149}, Element.ALIGN_LEFT);
+            PdfPCell addressDetailsCell11 = pdfFormattingUtils.getCellWithBackgroundColor("Present Address:", smallFont, 0, Element.ALIGN_LEFT, 160, 160, 160);
+            PdfPCell addressDetailsCell12 = pdfFormattingUtils.getCellWithBackgroundColor("Permanent Address:", smallFont, 0, Element.ALIGN_LEFT, 160, 160, 160);
+
+            emptyRow = pdfFormattingUtils.getCellWithBackgroundColor(3, 1, 255, 255, 255);
+
+            Paragraph addressDetailsPara11 = pdfFormattingUtils.createParagraph("Care of:", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara12 = pdfFormattingUtils.createParagraph("Village/Town: Cha 37/1, North Badda", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara13 = pdfFormattingUtils.createParagraph("Post Office: Badda", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara14 = pdfFormattingUtils.createParagraph("Post Code: 1212", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara15 = pdfFormattingUtils.createParagraph("Upazilla/Thana: Badda", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara16 = pdfFormattingUtils.createParagraph("District: Dhaka", verySmallFont, 0, Element.ALIGN_LEFT);
+            PdfPCell addressDetailsCell21 = pdfFormattingUtils.getCellWithBackgroundColor(Arrays.asList(addressDetailsPara11, addressDetailsPara12, addressDetailsPara13, addressDetailsPara14, addressDetailsPara15, addressDetailsPara16), 192, 192, 192);
+
+            Paragraph addressDetailsPara21 = pdfFormattingUtils.createParagraph("Care of:", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara22 = pdfFormattingUtils.createParagraph("Village/Town: Betbaria", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara23 = pdfFormattingUtils.createParagraph("Post Office: Betbaria", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara24 = pdfFormattingUtils.createParagraph("Post Code: 7110", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara25 = pdfFormattingUtils.createParagraph("Upazilla/Thana: Gangni", verySmallFont, 0, Element.ALIGN_LEFT);
+            Paragraph addressDetailsPara26 = pdfFormattingUtils.createParagraph("District: Meherpur", verySmallFont, 0, Element.ALIGN_LEFT);
+            PdfPCell addressDetailsCell22 = pdfFormattingUtils.getCellWithBackgroundColor(Arrays.asList(addressDetailsPara21, addressDetailsPara22, addressDetailsPara23, addressDetailsPara24, addressDetailsPara25, addressDetailsPara26), 192, 192, 192);
+
+
+            addressDetails.addCell(addressDetailsCell11);
+            addressDetails.addCell(emptyColumn);
+            addressDetails.addCell(addressDetailsCell12);
+            addressDetails.addCell(emptyRow);
+
+            addressDetails.addCell(addressDetailsCell21);
+            addressDetails.addCell(emptyColumn);
+            addressDetails.addCell(addressDetailsCell22);
+
+            document.open();
+            document.add(imageTable);
+            document.add(userIdTable);
+            document.add(applicantsDetails);
+            document.add(otherDetails);
+            document.add(addressDetails);
+
+            document.close();
+
+            System.out.println("Successful");
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         return watermarkPdfGeneration.addPageNumberToEveryPage(inputStream);
     }
