@@ -1,8 +1,13 @@
 package com.example.spring_security_demo.utils;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+
+import java.awt.Color;
 
 
 @Component
@@ -40,5 +45,21 @@ public class ExcelFormattingUtils {
             return Integer.parseInt(cell.getStringCellValue());
 
         return -1;
+    }
+
+    public CellStyle createCellStyle(XSSFWorkbook workbook, Color color) {
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+        XSSFFont font = workbook.createFont();
+        font.setBold(true);
+        cellStyle.setFont(font);
+
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        XSSFColor xssfColor = new XSSFColor(color);
+        cellStyle.setFillForegroundColor(xssfColor);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
     }
 }

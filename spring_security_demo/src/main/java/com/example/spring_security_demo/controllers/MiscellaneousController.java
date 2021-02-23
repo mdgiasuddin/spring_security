@@ -26,4 +26,9 @@ public class MiscellaneousController {
     public void parseJson() {
         jsonParsingService.parseJson();
     }
+
+    @GetMapping("/map-test")
+    public Object mapTest() {
+        return miscellaneousService.mapTest();
+    }
 }

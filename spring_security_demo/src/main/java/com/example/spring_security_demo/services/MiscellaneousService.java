@@ -1,14 +1,19 @@
 package com.example.spring_security_demo.services;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -107,5 +112,27 @@ public class MiscellaneousService {
         }
 
         return String.join(" ", wordList);
+    }
+
+    public Object mapTest() {
+        try {
+            Map map = new HashMap<>();
+            String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyyhhmma"));
+
+            map.put("name", "Gias Uddin");
+            map.put("age", 26);
+            map.put("currentTime", currentTime);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(map);
+            System.out.println("String ----> " + jsonString);
+
+            Map jsonMap = new ObjectMapper().readValue(jsonString, Map.class);
+
+            return jsonMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
