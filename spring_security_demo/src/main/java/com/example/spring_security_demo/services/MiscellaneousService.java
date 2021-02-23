@@ -1,6 +1,7 @@
 package com.example.spring_security_demo.services;
 
 
+import com.example.spring_security_demo.common.CommonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -132,7 +133,7 @@ public class MiscellaneousService {
             return jsonMap;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw new CommonException(e.getMessage());
         }
     }
 }
