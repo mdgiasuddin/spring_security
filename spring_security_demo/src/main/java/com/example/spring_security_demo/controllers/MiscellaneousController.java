@@ -31,4 +31,9 @@ public class MiscellaneousController {
     public Object mapTest() {
         return miscellaneousService.mapTest();
     }
+
+    @GetMapping("/data/saving")
+    public Object dataSavings() {
+        return miscellaneousService.dataSavings();
+    }
 }

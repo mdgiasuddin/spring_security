@@ -2,6 +2,7 @@ package com.example.spring_security_demo.services;
 
 
 import com.example.spring_security_demo.common.CommonException;
+import com.example.spring_security_demo.dtos.BasicInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -117,6 +115,8 @@ public class MiscellaneousService {
 
     public Object mapTest() {
         try {
+            BasicInfo basicInfo = new BasicInfo();
+
             Map map = new HashMap<>();
             String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyyhhmma"));
 
@@ -125,11 +125,105 @@ public class MiscellaneousService {
             map.put("age", 26);
             map.put("currentTime", currentTime);
 
+            basicInfo.setMap(map);
+            basicInfo.setAddress("Betbaria, Gangni, Meherpur");
+
             ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(map);
+            String jsonString = mapper.writeValueAsString(basicInfo);
+            System.out.println("String ----> " + jsonString);
+
+            BasicInfo jsonMap = new ObjectMapper().readValue(jsonString, BasicInfo.class);
+
+            return jsonMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CommonException(e.getMessage());
+        }
+    }
+
+    public Object dataSavings() {
+        try {
+            Map dataMap = new HashMap<>();
+            String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyyhhmma"));
+
+            dataMap.put("name", "Gias Uddin");
+            dataMap.put("age", 26);
+
+            Map addressMap = new LinkedHashMap();
+            addressMap.put("RoadNo", 20);
+            addressMap.put("village", "Betbaria");
+            addressMap.put("postOffice", "Betbaria");
+            addressMap.put("upazila", "Gangni");
+            addressMap.put("district", "Meherpur");
+            addressMap.put("country", "Bangladesh");
+
+            dataMap.put("address", addressMap);
+            dataMap.put("currentTime", currentTime);
+            dataMap.put("class", 10);
+            dataMap.put("classRollNo", 1);
+            dataMap.put("schoolName", "Betbaria Secondary school");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(dataMap);
             System.out.println("String ----> " + jsonString);
 
             Map jsonMap = new ObjectMapper().readValue(jsonString, Map.class);
+
+
+            Map newDataMap = new HashMap<>();
+            newDataMap.put("age", 20);
+
+            Map newAddressMap = new HashMap();
+            newAddressMap.put("RoadNo", 30);
+            newAddressMap.put("village", "Bamundi");
+            newAddressMap.put("postOffice", "Bamundi");
+            newAddressMap.put("upazila", "Gangni");
+            newAddressMap.put("district", "Meherpur");
+            newAddressMap.put("country", "Bangladesh");
+
+            newDataMap.put("address", newAddressMap);
+            newDataMap.put("class", 10);
+            newDataMap.put("schoolName", "Betbaria Secondary");
+            newDataMap.put("currentTime", null);
+            newDataMap.put("fatherName", "Mosharraf Hossain");
+            newDataMap.put("motherName", "Jahanara Begum");
+
+            Map changedData = new HashMap();
+            for (Object key : newDataMap.keySet()) {
+                if (!jsonMap.containsKey(key) || !jsonMap.get(key).equals(newDataMap.get(key))) {
+
+                    Map changed = new HashMap();
+                    changed.put("O", jsonMap.get(key));
+                    changed.put("N", newDataMap.get(key));
+                    changedData.put(key, changed);
+
+                    if (newDataMap.get(key) == null) {
+                        jsonMap.remove(key);
+                    } else {
+                        jsonMap.put(key, newDataMap.get(key));
+                    }
+                }
+            }
+
+            String changedJsonString = mapper.writeValueAsString(changedData);
+            System.out.println("Changed: " + changedJsonString);
+
+            Map changedJsonMap = new ObjectMapper().readValue(changedJsonString, Map.class);
+
+            String jsonString2 = mapper.writeValueAsString(jsonMap);
+            System.out.println("After Change: " + jsonString2);
+
+            for (Object key : changedJsonMap.keySet()) {
+                Map changed = (Map) changedJsonMap.get(key);
+                if (changed.get("O") == null) {
+                    jsonMap.remove(key);
+                } else {
+                    jsonMap.put(key, changed.get("O"));
+                }
+            }
+
+            String jsonString4 = mapper.writeValueAsString(jsonMap);
+            System.out.println("After Restore: " + jsonString4);
 
             return jsonMap;
         } catch (Exception e) {
