@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/excel/generation")
@@ -19,7 +21,7 @@ public class ExcelGenerationController {
     private final ExcelGenerationService excelGenerationService;
 
     @GetMapping("/test")
-    public Object generateTestExcel() {
+    public Object generateTestExcel() throws IOException {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
