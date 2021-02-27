@@ -148,6 +148,7 @@ public class MiscellaneousService {
 
             dataMap.put("name", "Gias Uddin");
             dataMap.put("age", 26);
+            dataMap.put("gender", "M");
 
             Map addressMap = new LinkedHashMap();
             addressMap.put("RoadNo", 20);
@@ -185,6 +186,7 @@ public class MiscellaneousService {
             newDataMap.put("class", 10);
             newDataMap.put("schoolName", "Betbaria Secondary");
             newDataMap.put("currentTime", null);
+            newDataMap.put("gender", "M");
             newDataMap.put("fatherName", "Mosharraf Hossain");
             newDataMap.put("motherName", "Jahanara Begum");
 
