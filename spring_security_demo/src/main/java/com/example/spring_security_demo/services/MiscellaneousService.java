@@ -144,7 +144,7 @@ public class MiscellaneousService {
     public Object dataSavings() {
         try {
             Map dataMap = new HashMap<>();
-            String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyyhhmma"));
+            String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMM-yyyy hh:mm:ss.SSSSSSSSSa"));
 
             dataMap.put("name", "Gias Uddin");
             dataMap.put("age", 26);
@@ -227,6 +227,9 @@ public class MiscellaneousService {
             String jsonString4 = mapper.writeValueAsString(jsonMap);
             System.out.println("After Restore: " + jsonString4);
 
+            String currentTimeString = String.valueOf(jsonMap.get("currentTime"));
+            LocalDateTime localDateTime = LocalDateTime.parse(currentTimeString, DateTimeFormatter.ofPattern("dd-MMM-yyyy hh:mm:ss.SSSSSSSSSa"));
+            System.out.println("Local Date Time : " + localDateTime);
             return jsonMap;
         } catch (Exception e) {
             e.printStackTrace();
