@@ -2,9 +2,11 @@ package com.example.spring_security_demo.controllers;
 
 import com.example.spring_security_demo.common.ConstantsClass;
 import com.example.spring_security_demo.datasource.BearerToken;
+import com.example.spring_security_demo.datasource.User;
 import com.example.spring_security_demo.models.AuthenticationRequest;
 import com.example.spring_security_demo.models.AuthenticationResponse;
 import com.example.spring_security_demo.repositories.BearerTokenRepository;
+import com.example.spring_security_demo.repositories.UserRepository;
 import com.example.spring_security_demo.resources.MyUserDetailsService;
 import com.example.spring_security_demo.services.LoginService;
 import com.example.spring_security_demo.utils.JWTUtil;
@@ -33,15 +35,16 @@ public class LoginController {
     private final HttpServletRequest httpServletRequest;
     private final BearerTokenRepository bearerTokenRepository;
     private final LoginService loginService;
+    private final UserRepository userRepository;
 
     @GetMapping("/")
     public String home() {
-/*        User user = new User();
+        User user = new User();
         user.setUsername("xyz");
         user.setPassword("xyz");
         user.setActive(true);
         user.setRoles("ROLE_ADMIN");
-        userRepository.save(user);*/
+        userRepository.save(user);
 
         return ("<h1>Welcome</h1>");
     }

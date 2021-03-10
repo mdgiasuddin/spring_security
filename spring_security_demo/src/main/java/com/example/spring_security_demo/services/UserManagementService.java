@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class UserManagementService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Object createNewUser(CreateUserDTO createUserDTO) throws Exception {
+    public Object createNewUser(@Validated CreateUserDTO createUserDTO) throws Exception {
         Optional<User> user = userRepository.findByUsername(createUserDTO.getUsername());
 
         if (!user.equals(Optional.empty()))

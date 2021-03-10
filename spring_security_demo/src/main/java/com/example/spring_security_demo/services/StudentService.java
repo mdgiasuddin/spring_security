@@ -14,6 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,12 +103,12 @@ public class StudentService {
             while (true) {
                 int randIndex = random.nextInt(listLength);
                 System.out.println("Random number : " + randIndex);
-                if (resultList.size() == 0 || !resultList.get(resultList.size()-1).getSchoolName().equals(studentDTOList.get(randIndex).getSchoolName())) {
+                if (resultList.size() == 0 || !resultList.get(resultList.size() - 1).getSchoolName().equals(studentDTOList.get(randIndex).getSchoolName())) {
                     resultList.add(studentDTOList.get(randIndex));
 
                     StudentDTO tempStudent = studentDTOList.get(randIndex);
-                    studentDTOList.set(randIndex, studentDTOList.get(listLength-1));
-                    studentDTOList.set(listLength-1, tempStudent);
+                    studentDTOList.set(randIndex, studentDTOList.get(listLength - 1));
+                    studentDTOList.set(listLength - 1, tempStudent);
                     listLength--;
 
                     count = 0;
@@ -122,11 +124,11 @@ public class StudentService {
                 break;
 
         }
-        for (int i=0; i<listLength; i++) {
+        for (int i = 0; i < listLength; i++) {
             StudentDTO student = studentDTOList.get(i);
 
-            for (int j=1; j<resultList.size(); j++) {
-                if (!resultList.get(j-1).getSchoolName().equals(student.getSchoolName()) && !resultList.get(j).getSchoolName().equals(student.getSchoolName())) {
+            for (int j = 1; j < resultList.size(); j++) {
+                if (!resultList.get(j - 1).getSchoolName().equals(student.getSchoolName()) && !resultList.get(j).getSchoolName().equals(student.getSchoolName())) {
                     resultList.add(j, student);
                     break;
                 }
@@ -179,5 +181,26 @@ public class StudentService {
 
         Image logoImage = Image.getInstance(ConstantsClass.AMAR_AMI_LOGO);
         watermarkPdfGeneration.addWaterMarkToPdf(admitCardFileName, watermarkAdmitCard, logoImage, 350, 350, 0.1f);
+    }
+
+
+    //    @Scheduled(fixedRate = 5000)
+    public void createStudent() {
+        List<Student> studentList = Arrays.asList(
+                new Student("Gias Uddin", "Betbaria Secondary School", 1, "Ten", 123456, 234567, 56.0),
+                new Student("Sobuj Ahmed", "Pirtola Secondary School", 1, "Eight", 123457, 234568, 60.0),
+                new Student("Biplob Hossain", "Nouda Para Secondary School", 1, "Ten", 123458, 234569, 62.0),
+                new Student("Rony Islam", "HB Secondary School", 1, "Ten", 123459, 234570, 58.0),
+                new Student("Parvez Ahmed", "Betbaria Secondary School", 1, "Ten", 123460, 234571, 59.0),
+                new Student("Rubel Ahmed", "Pirtola Secondary School", 1, "Five", 123461, 234572, 70.0),
+                new Student("Riaz Ahmed", "Nouda Para Secondary School", 1, "Ten", 123462, 234573, 81.0),
+                new Student("Rabby Ahmed", "HB Secondary School", 1, "Eight", 123463, 234574, 76.0)
+        );
+
+        studentRepository.saveAll(studentList);
+    }
+
+    public Page<Student> filterStudentBySearch(Map map, Pageable pageable) {
+        return studentRepository.filterBySearch(map.get("name"), map.get("schoolName"), map.get("schoolRollNo"), pageable);
     }
 }

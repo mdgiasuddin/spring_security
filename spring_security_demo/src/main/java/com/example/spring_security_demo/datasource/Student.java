@@ -2,12 +2,14 @@ package com.example.spring_security_demo.datasource;
 
 import com.example.spring_security_demo.common.BaseAuditingEntity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "student_table")
+@NoArgsConstructor
 public class Student extends BaseAuditingEntity {
 
     @Id
@@ -37,4 +39,14 @@ public class Student extends BaseAuditingEntity {
 
     @Column(name = "marks")
     private Double marks;
+
+    public Student(String name, String schoolName, Integer schoolRollNo, String classId, Integer rollNo, Integer regNo, Double marks) {
+        this.name = name;
+        this.schoolName = schoolName;
+        this.schoolRollNo = schoolRollNo;
+        this.classId = classId;
+        this.rollNo = rollNo;
+        this.regNo = regNo;
+        this.marks = marks;
+    }
 }
