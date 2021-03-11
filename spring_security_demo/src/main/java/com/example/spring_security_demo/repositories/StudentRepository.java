@@ -17,4 +17,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             "( :schoolRollNo is null or s.schoolRollNo = :schoolRollNo )")
     Page<Student> filterBySearch(@Param("name") Object name, @Param("schoolName") Object schoolName
             , @Param("schoolRollNo") Object schoolRollNo, Pageable pageable);
+
+
+    long countByName(Object name);
 }

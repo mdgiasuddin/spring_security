@@ -36,4 +36,9 @@ public class StudentController {
         return studentService.filterStudentBySearch(map, pageable);
     }
 
+    @PostMapping("/count")
+    public long countStudentBySearch(@RequestBody Map map) {
+        return studentService.countStudentBySearch(map);
+    }
+
 }

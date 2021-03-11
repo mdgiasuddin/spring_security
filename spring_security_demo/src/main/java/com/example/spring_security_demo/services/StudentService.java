@@ -203,4 +203,8 @@ public class StudentService {
     public Page<Student> filterStudentBySearch(Map map, Pageable pageable) {
         return studentRepository.filterBySearch(map.get("name"), map.get("schoolName"), map.get("schoolRollNo"), pageable);
     }
+
+    public long countStudentBySearch(Map map) {
+        return studentRepository.countByName(map.get("name"));
+    }
 }
