@@ -45,7 +45,7 @@ public class TeamPlayerService {
         for (PlayerDTO playerDTO : playerDTOList) {
             Player player = new Player();
             player.setName(playerDTO.getName());
-            player.setAge(player.getAge());
+            player.setAge(playerDTO.getAge());
             player.setJerseyNo(playerDTO.getJerseyNo());
             player.setTeam(teamList.get(random.nextInt(teamList.size())));
 
