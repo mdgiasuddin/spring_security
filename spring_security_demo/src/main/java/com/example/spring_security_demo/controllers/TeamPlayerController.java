@@ -30,5 +30,10 @@ public class TeamPlayerController {
         return teamPlayerService.getAllPlayer();
     }
 
+    @GetMapping("/player/all/team/{teamName}")
+    public List<PlayerDTO> getTeamPlayer(@PathVariable("teamName") String teamName) {
+        return teamPlayerService.getTeamPlayer(teamName);
+    }
+
 
 }

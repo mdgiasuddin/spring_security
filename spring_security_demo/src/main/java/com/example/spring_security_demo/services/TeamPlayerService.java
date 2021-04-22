@@ -56,4 +56,8 @@ public class TeamPlayerService {
     public List<PlayerDTO> getAllPlayer() {
         return playerRepository.getAllPlayer();
     }
+
+    public List<PlayerDTO> getTeamPlayer(String teamName) {
+        return playerRepository.getAllPlayer(teamName);
+    }
 }
