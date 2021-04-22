@@ -20,4 +20,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
 
     long countByName(Object name);
+
+    List<Student> findByNameAndSchoolName(String name, String schoolName);
+
+    List<Student> findBySchoolNameAndClassIdAndSchoolRollNo(String schoolName, String classId, int schoolRollNo);
+
 }
