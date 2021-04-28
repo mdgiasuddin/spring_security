@@ -36,6 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/angular/api/**").permitAll()
+                .antMatchers("/elastic/**").permitAll()
                 .antMatchers("/play/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()

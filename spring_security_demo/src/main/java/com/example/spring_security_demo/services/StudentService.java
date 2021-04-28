@@ -70,10 +70,10 @@ public class StudentService {
                     int schoolRollNo = excelFormattingUtils.getIntegerFromAllCellType(row.getCell(3));
 
                     StudentDTO studentDTO = new StudentDTO();
-                    studentDTO.setStudentName(studentName);
+                    studentDTO.setName(studentName);
                     studentDTO.setSchoolName(schoolName);
                     studentDTO.setClassId(classId);
-                    studentDTO.setSchoolRollNo(schoolRollNo);
+                    studentDTO.setSchoolRollNo(String.valueOf(schoolRollNo));
 
                     studentDTOList.add(studentDTO);
                 }
@@ -154,10 +154,10 @@ public class StudentService {
         int i = 0;
         for (StudentDTO studentDTO : studentDTOList) {
             Student student = new Student();
-            student.setName(studentDTO.getStudentName());
+            student.setName(studentDTO.getName());
             student.setSchoolName(studentDTO.getSchoolName());
             student.setClassId(studentDTO.getClassId());
-            student.setSchoolRollNo(studentDTO.getSchoolRollNo());
+            student.setSchoolRollNo(Integer.parseInt(studentDTO.getSchoolRollNo()));
             int rollNo = startingRollNo + i;
             int regNo = (startingRegNo * 10000) + ((1 + random.nextInt(9)) * 1000) + increasingRegNo + i;
             student.setRollNo(rollNo);
