@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/angular/api/**").permitAll()
                 .antMatchers("/elastic/**").permitAll()
                 .antMatchers("/play/**").permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()

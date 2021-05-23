@@ -9,22 +9,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO {
-    private String id;
+    private Integer id;
     private String name;
     private String schoolName;
     private String classId;
-    private String schoolRollNo;
-    private String rollNo;
-    private String regNo;
+    private Integer schoolRollNo;
+    private Integer rollNo;
+    private Integer regNo;
 
     public StudentDTO(Student student) {
-        this.id = String.valueOf(student.getId());
+        this.id = student.getId();
         this.name = student.getName();
         this.schoolName = student.getSchoolName();
         this.classId = student.getClassId();
-        this.schoolRollNo = String.valueOf(student.getSchoolRollNo());
-        this.rollNo = String.valueOf(student.getRollNo());
-        this.regNo = String.valueOf(student.getRegNo());
+        this.schoolRollNo = student.getSchoolRollNo();
+        this.rollNo = student.getRollNo();
+        this.regNo = student.getRegNo();
     }
 
 }

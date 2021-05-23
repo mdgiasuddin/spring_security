@@ -73,7 +73,7 @@ public class StudentService {
                     studentDTO.setName(studentName);
                     studentDTO.setSchoolName(schoolName);
                     studentDTO.setClassId(classId);
-                    studentDTO.setSchoolRollNo(String.valueOf(schoolRollNo));
+                    studentDTO.setSchoolRollNo(schoolRollNo);
 
                     studentDTOList.add(studentDTO);
                 }
@@ -157,7 +157,7 @@ public class StudentService {
             student.setName(studentDTO.getName());
             student.setSchoolName(studentDTO.getSchoolName());
             student.setClassId(studentDTO.getClassId());
-            student.setSchoolRollNo(Integer.parseInt(studentDTO.getSchoolRollNo()));
+            student.setSchoolRollNo(studentDTO.getSchoolRollNo());
             int rollNo = startingRollNo + i;
             int regNo = (startingRegNo * 10000) + ((1 + random.nextInt(9)) * 1000) + increasingRegNo + i;
             student.setRollNo(rollNo);
