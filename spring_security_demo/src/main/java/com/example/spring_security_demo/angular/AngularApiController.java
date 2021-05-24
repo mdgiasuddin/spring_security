@@ -2,11 +2,9 @@ package com.example.spring_security_demo.angular;
 
 import com.example.spring_security_demo.dtos.AngularData;
 import com.example.spring_security_demo.dtos.StudentDTO;
-import com.example.spring_security_demo.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/angular/api")
-@CrossOrigin(origins = "http://localhost:4100")
+//@CrossOrigin(origins = "http://localhost:4100")
 public class AngularApiController {
 
     private final AngularApiService angularApiService;
