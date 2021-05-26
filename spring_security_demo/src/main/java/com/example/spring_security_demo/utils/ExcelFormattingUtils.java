@@ -36,7 +36,7 @@ public class ExcelFormattingUtils {
         return "";
     }
 
-    public int getIntegerFromAllCellType(Cell cell) {
+    public Integer getIntegerFromAllCellType(Cell cell) {
         if (cell == null)
             return -1;
         if (cell.getCellType().equals(CellType.NUMERIC))

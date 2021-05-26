@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO {
-    private Integer id;
+    private Long id;
     private String name;
     private String schoolName;
     private String classId;
-    private Integer schoolRollNo;
-    private Integer rollNo;
-    private Integer regNo;
+    private Long schoolRollNo;
+    private Long rollNo;
+    private Long regNo;
 
     public StudentDTO(Student student) {
         this.id = student.getId();

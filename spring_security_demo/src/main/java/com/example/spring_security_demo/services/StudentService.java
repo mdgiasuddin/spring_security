@@ -67,7 +67,7 @@ public class StudentService {
                     String studentName = excelFormattingUtils.getStringFromAllCellType(row.getCell(0));
                     String schoolName = excelFormattingUtils.getStringFromAllCellType(row.getCell(1));
                     String classId = excelFormattingUtils.getStringFromAllCellType(row.getCell(2));
-                    int schoolRollNo = excelFormattingUtils.getIntegerFromAllCellType(row.getCell(3));
+                    Long schoolRollNo = excelFormattingUtils.getIntegerFromAllCellType(row.getCell(3)).longValue();
 
                     StudentDTO studentDTO = new StudentDTO();
                     studentDTO.setName(studentName);
@@ -145,9 +145,9 @@ public class StudentService {
 
         Map<String, String> map = classOptionUtils.getOptionsOfClass(firstStudent.getClassId());
 
-        int startingRollNo = Integer.parseInt(map.get("startingRollNo"));
-        int startingRegNo = Integer.parseInt(map.get("startingRegNo"));
-        int increasingRegNo = Integer.parseInt(map.get("increasingRegNo"));
+        Long startingRollNo = Long.parseLong(map.get("startingRollNo"));
+        Long startingRegNo = Long.parseLong(map.get("startingRegNo"));
+        Long increasingRegNo = Long.parseLong(map.get("increasingRegNo"));
 
         Random random = new Random();
 
@@ -158,8 +158,8 @@ public class StudentService {
             student.setSchoolName(studentDTO.getSchoolName());
             student.setClassId(studentDTO.getClassId());
             student.setSchoolRollNo(studentDTO.getSchoolRollNo());
-            int rollNo = startingRollNo + i;
-            int regNo = (startingRegNo * 10000) + ((1 + random.nextInt(9)) * 1000) + increasingRegNo + i;
+            Long rollNo = startingRollNo + i;
+            Long regNo = (startingRegNo * 10000) + ((1 + random.nextInt(9)) * 1000) + increasingRegNo + i;
             student.setRollNo(rollNo);
             student.setRegNo(regNo);
             i++;
@@ -187,14 +187,14 @@ public class StudentService {
     //    @Scheduled(fixedRate = 5000)
     public void createStudent() {
         List<Student> studentList = Arrays.asList(
-                new Student("Gias Uddin", "Betbaria Secondary School", 1, "Ten", 123456, 234567, 56.0),
-                new Student("Sobuj Ahmed", "Pirtola Secondary School", 1, "Eight", 123457, 234568, 60.0),
-                new Student("Biplob Hossain", "Nouda Para Secondary School", 1, "Ten", 123458, 234569, 62.0),
-                new Student("Rony Islam", "HB Secondary School", 1, "Ten", 123459, 234570, 58.0),
-                new Student("Parvez Ahmed", "Betbaria Secondary School", 1, "Ten", 123460, 234571, 59.0),
-                new Student("Rubel Ahmed", "Pirtola Secondary School", 1, "Five", 123461, 234572, 70.0),
-                new Student("Riaz Ahmed", "Nouda Para Secondary School", 1, "Ten", 123462, 234573, 81.0),
-                new Student("Rabby Ahmed", "HB Secondary School", 1, "Eight", 123463, 234574, 76.0)
+                new Student("Gias Uddin", "Betbaria Secondary School", 1L, "Ten", 123456L, 234567L, 56.0),
+                new Student("Sobuj Ahmed", "Pirtola Secondary School", 1L, "Eight", 123457L, 234568L, 60.0),
+                new Student("Biplob Hossain", "Nouda Para Secondary School", 1L, "Ten", 123458L, 234569L, 62.0),
+                new Student("Rony Islam", "HB Secondary School", 1L, "Ten", 123459L, 234570L, 58.0),
+                new Student("Parvez Ahmed", "Betbaria Secondary School", 1L, "Ten", 123460L, 234571L, 59.0),
+                new Student("Rubel Ahmed", "Pirtola Secondary School", 1L, "Five", 123461L, 234572L, 70.0),
+                new Student("Riaz Ahmed", "Nouda Para Secondary School", 1L, "Ten", 123462L, 234573L, 81.0),
+                new Student("Rabby Ahmed", "HB Secondary School", 1L, "Eight", 123463L, 234574L, 76.0)
         );
 
         studentRepository.saveAll(studentList);
