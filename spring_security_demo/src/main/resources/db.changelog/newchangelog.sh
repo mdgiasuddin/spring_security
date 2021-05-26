@@ -9,10 +9,10 @@ NEWDIRNAME=sprint$1 ;
 NEWFILENAME=changelog-$DATE.yaml ;
 
 if [ -d "$NEWDIRNAME" ]; then
-echo "File $NEWFILENAME successfully created in existing directory: $NEWDIRNAME" ;
+echo "File: $NEWFILENAME successfully created in existing directory: $NEWDIRNAME" ;
 else
 `mkdir -p $NEWDIRNAME`;
-echo "File $NEWFILENAME successfully created after creating directory: $NEWDIRNAME" ;
+echo "File: $NEWFILENAME successfully created after creating directory: $NEWDIRNAME" ;
 fi
 
 cd $NEWDIRNAME
