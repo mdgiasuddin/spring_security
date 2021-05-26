@@ -5,3 +5,9 @@ databaseChangeLog:
   - include:
       file: sprint01/changelog-2105261618.yaml
       relativeToChangelogFile: true
+  - include:
+      file: sprint01/changelog-2105261734.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: sprint01/changelog-2105261800.yaml
+      relativeToChangelogFile: true
