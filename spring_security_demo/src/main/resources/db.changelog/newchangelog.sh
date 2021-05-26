@@ -1,4 +1,23 @@
-databaseChangeLog:
+if [ "$#" -ne 1 ]; then
+  echo "Error! Please enter a directory!" ;
+  exit 1 ;
+fi
+
+DATE=$(date '+%Y%m%d%H%M%S') ;
+
+NEWDIRNAME=sprint$1 ;
+NEWFILENAME=changelog-$DATE.yaml ;
+
+if [ -d "$NEWDIRNAME" ]; then
+echo "File $NEWFILENAME successfully created in existing directory: $NEWDIRNAME" ;
+else
+`mkdir -p $NEWDIRNAME`;
+echo "File $NEWFILENAME successfully created after creating directory: $NEWDIRNAME" ;
+fi
+
+cd $NEWDIRNAME
+
+echo "databaseChangeLog:
   - property:
       name: now
       value: now()
@@ -16,8 +35,9 @@ databaseChangeLog:
       value: float
       dbms: mysql
   - changeSet:
-      id: 2105261142
-      author: giash
+      id: $DATE
+      author: $USER
+      comment: Enter your comment
       changes:
         - createTable:
             tableName: create_table
@@ -78,3 +98,4 @@ databaseChangeLog:
             columns:
               - column:
                   name: column_name
+" > $NEWFILENAME ;
