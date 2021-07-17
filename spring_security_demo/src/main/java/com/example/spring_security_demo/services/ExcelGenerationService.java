@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +38,7 @@ public class ExcelGenerationService {
         cellStyle.setBorderTop(BorderStyle.THIN);
         cellStyle.setBorderBottom(BorderStyle.THIN);
 
-        XSSFColor xssfColor = new XSSFColor(color);
-        cellStyle.setFillForegroundColor(xssfColor);
+        cellStyle.setFillForegroundColor(new XSSFColor(color));
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         return cellStyle;
@@ -50,24 +50,26 @@ public class ExcelGenerationService {
         CreationHelper createHelper = workbook.getCreationHelper();
         String timePart = timeFlag ? " hh:mm:ss AM/PM" : "";
         cellStyle.setDataFormat(
-                createHelper.createDataFormat().getFormat("dd-MMM-yyyy" + timePart + "")
+                createHelper.createDataFormat().getFormat("dd MMM yyyy" + timePart + "")
         );
         return cellStyle;
     }
 
-    public Object createExcelFile(ExcelData excelData) throws IOException {
+    public InputStreamResource createExcelFile(ExcelData excelData) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(excelData.getSheetName());
 
-        XSSFCellStyle headerCellStyle = createCellStyle(workbook, new Color(230, 200, 200));
+        XSSFCellStyle headerCellStyle = createCellStyle(workbook, new Color(146, 190, 238));
 
-        int rowNum = 0, cellNum = 0;
+        int rowNum = 0, colNum = 0;
         Row headerRow = sheet.createRow(rowNum);
         for (String headerCell : excelData.getHeaderRow()) {
-            Cell cell = headerRow.createCell(cellNum);
+            Cell cell = headerRow.createCell(colNum);
             cell.setCellValue(headerCell);
             cell.setCellStyle(headerCellStyle);
-            cellNum++;
+            sheet.autoSizeColumn(colNum);
+            colNum++;
+
         }
         rowNum++;
 
@@ -75,47 +77,45 @@ public class ExcelGenerationService {
         CellStyle dateTimeCellStyle = createDateCellStyle(workbook, true);
         for (Object[] otherRow : excelData.getOtherRowList()) {
             Row row = sheet.createRow(rowNum);
-            cellNum = 0;
+            colNum = 0;
             for (Object otherRowCell : otherRow) {
-                Cell cell = row.createCell(cellNum);
-                if (otherRowCell.getClass().equals(String.class))
-                    cell.setCellValue(String.valueOf(otherRowCell));
-                else if (otherRowCell.getClass().equals(Integer.class))
-                    cell.setCellValue((int) otherRowCell);
-                else if (otherRowCell.getClass().equals(Double.class))
-                    cell.setCellValue((double) otherRowCell);
-                else if (otherRowCell.getClass().equals(Boolean.class))
+                Cell cell = row.createCell(colNum);
+
+                if (otherRowCell instanceof Integer || otherRowCell instanceof Float || otherRowCell instanceof Double)
+                    cell.setCellValue(Double.parseDouble(String.valueOf(otherRowCell)));
+                else if (otherRowCell instanceof Boolean)
                     cell.setCellValue((boolean) otherRowCell);
-                else if (otherRowCell.getClass().equals(LocalDate.class)) {
+                else if (otherRowCell instanceof LocalDate) {
                     cell.setCellValue((LocalDate) otherRowCell);
                     cell.setCellStyle(dateCellStyle);
-                } else if (otherRowCell.getClass().equals(LocalDateTime.class)) {
-                    cell.setCellValue((LocalDateTime) otherRowCell);
+                } else if (otherRowCell instanceof LocalDateTime) {
+                    cell.setCellValue(((LocalDateTime) otherRowCell));
                     cell.setCellStyle(dateTimeCellStyle);
-                }
+                } else
+                    cell.setCellValue(String.valueOf(otherRowCell));
 
-                cellNum++;
+                colNum++;
             }
             rowNum++;
         }
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        workbook.write(byteArrayOutputStream);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-        return new InputStreamResource(byteArrayInputStream);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        return new InputStreamResource(inputStream);
 
     }
 
-    public Object createFile() throws IOException {
+    public InputStreamResource createFile() throws IOException {
 
         String[] headers = new String[]{
-                "Sl.", "Name", "Father's Name", "Adult", "Class", "Roll", "Mark", "Date of Birth", "Current Time"
+                "Sl.", "Name", "Father's Name", "Adult", "Class", "Roll", "Mark", "Float", "Date of Birth", "Current Time", "Date String"
         };
 
         List<Object[]> otherRowList = new ArrayList<>();
         for (int i = 1; i <= 2000; i++) {
             Object[] otherRow = new Object[]{
-                    i + ".", "Gias Uddin", "Md Mosharraf Hossain", true, 10, 2, 50.25, LocalDate.now(), LocalDateTime.now()
+                    i + ".", "Gias Uddin", "Md Mosharraf Hossain", true, 10, 2, 50.25, 20.1f, LocalDate.now(), LocalDateTime.now(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
             };
             otherRowList.add(otherRow);
         }
