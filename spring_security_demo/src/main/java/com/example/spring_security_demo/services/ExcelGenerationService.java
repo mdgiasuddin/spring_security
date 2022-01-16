@@ -120,7 +120,6 @@ public class ExcelGenerationService {
             otherRowList.add(otherRow);
         }
 
-        ExcelData excelData = new ExcelData("Test", headers, otherRowList);
-        return createExcelFile(excelData);
+        return createExcelFile(new ExcelData("Test", headers, otherRowList));
     }
 }
